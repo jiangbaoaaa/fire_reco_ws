@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+import rospy
+import cv2
+from sensor_msgs.msg import Image, CameraInfo
+from geometry_msgs.msg import Point, PointStamped
+from cv_bridge import CvBridge
+import numpy as np
+
+class Fire3DLocator:
+    def __init__(self):
+        self.bridge = CvBridge()
+        self.depth_image = None
+        self.intrinsics = None
+        rospy.Subscriber("/camera/aligned_depth_to_color/image_raw", Image, self.depth_callback)
+        rospy.Subscriber("/camera/color/camera_info", CameraInfo, self.info_callback)
+        rospy.Subscriber("/fire_center_px", Point, self.fire_callback)
+        self.pub = rospy.Publisher("/fire_position_3d", PointStamped, queue_size=10)
+        cv2.namedWindow("Depth Visualization", cv2.WINDOW_NORMAL)
+
+    def info_callback(self, msg):
+        if not self.intrinsics:
+            self.intrinsics = {
+                'fx': msg.K[0], 'fy': msg.K[4],
+                'cx': msg.K[2], 'cy': msg.K[5]
+            }
+
+    def depth_callback(self, msg):
+        self.depth_image = self.bridge.imgmsg_to_cv2(msg, "passthrough")
+        # 深度图归一化显示
+        norm_depth = cv2.normalize(self.depth_image, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+        cv2.imshow("Depth Visualization", cv2.applyColorMap(norm_depth, cv2.COLORMAP_JET))
+        cv2.waitKey(1)
+
+    def fire_callback(self, msg):
+        if self.depth_image is None or self.intrinsics is None:
+            return
+            
+        u, v = int(msg.x), int(msg.y)
+        depth = self.depth_image[v, u] / 1000.0  # mm转m
+        
+        if 0.1 < depth < 10.0:  # 有效距离范围
+            point = PointStamped()
+            point.header.stamp = rospy.Time.now()
+            point.header.frame_id = "camera_color_optical_frame"
+            point.point.x = (u - self.intrinsics['cx']) * depth / self.intrinsics['fx']
+            point.point.y = (v - self.intrinsics['cy']) * depth / self.intrinsics['fy']
+            point.point.z = depth
+            self.pub.publish(point)
+            rospy.loginfo(f"Fire 3D Position: X={point.point.x:.2f}m Y={point.point.y:.2f}m Z={point.point.z:.2f}m")
+
+if __name__ == '__main__':
+    rospy.init_node('fire_3d_locator')
+    Fire3DLocator()
+    rospy.spin()

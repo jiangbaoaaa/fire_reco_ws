@@ -1,0 +1,8 @@
+prefix=/home/jiangbao/fire_reco_ws/devel
+
+Name: realsense_example_node
+Description: Description of realsense_example_node
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: cv_bridge roscpp sensor_msgs std_msgs
