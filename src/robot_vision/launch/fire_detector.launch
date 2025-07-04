@@ -2,7 +2,7 @@
     <node pkg="robot_vision" type="fire_detector.py" 
           name="fire_detector" output="screen"/>
     
-    <!-- 可添加RealSense相机启动配置 -->
+    <!-- 添加RealSense相机启动配置 -->
     <include file="$(find realsense2_camera)/launch/rs_camera.launch">
         <arg name="enable_color" value="true"/>
     </include>
