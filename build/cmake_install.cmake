@@ -148,6 +148,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/jiangbao/fire_reco_ws/build/gtest/cmake_install.cmake")
   include("/home/jiangbao/fire_reco_ws/build/realsense_example_node/cmake_install.cmake")
   include("/home/jiangbao/fire_reco_ws/build/robot_vision/cmake_install.cmake")
+  include("/home/jiangbao/fire_reco_ws/build/using_makers/cmake_install.cmake")
 
 endif()
 

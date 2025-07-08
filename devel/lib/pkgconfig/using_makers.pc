@@ -1,0 +1,8 @@
+prefix=/home/jiangbao/fire_reco_ws/devel
+
+Name: using_makers
+Description: Description of using_makers
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

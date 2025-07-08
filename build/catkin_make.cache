@@ -1,2 +1,2 @@
-realsense_example_node:robot_vision
+realsense_example_node:robot_vision:using_makers
 -DCATKIN_DEVEL_PREFIX=/home/jiangbao/fire_reco_ws/devel -DCMAKE_INSTALL_PREFIX=/home/jiangbao/fire_reco_ws/install -G Unix Makefiles

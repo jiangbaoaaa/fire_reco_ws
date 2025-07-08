@@ -7,3 +7,4 @@
 subdirs("gtest")
 subdirs("realsense_example_node")
 subdirs("robot_vision")
+subdirs("using_makers")

@@ -75,3 +75,16 @@
 /home/jiangbao/fire_reco_ws/build/robot_vision/CMakeFiles/rebuild_cache.dir
 /home/jiangbao/fire_reco_ws/build/robot_vision/CMakeFiles/edit_cache.dir
 /home/jiangbao/fire_reco_ws/build/robot_vision/CMakeFiles/test.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/install/strip.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/install.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/list_install_components.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/rebuild_cache.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/edit_cache.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/test.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/visualization_msgs_generate_messages_py.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/install/local.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/basic_shapes.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/visualization_msgs_generate_messages_eus.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/visualization_msgs_generate_messages_lisp.dir
+/home/jiangbao/fire_reco_ws/build/using_makers/CMakeFiles/visualization_msgs_generate_messages_cpp.dir
