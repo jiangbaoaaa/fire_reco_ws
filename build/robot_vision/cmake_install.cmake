@@ -64,3 +64,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/robot_vision" TYPE PROGRAM FILES "/home/jiangbao/fire_reco_ws/build/robot_vision/catkin_generated/installspace/fire_3D_locator.py")
 endif()
 
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/robot_vision" TYPE PROGRAM FILES "/home/jiangbao/fire_reco_ws/build/robot_vision/catkin_generated/installspace/fire_marker_publisher.py")
+endif()
+
