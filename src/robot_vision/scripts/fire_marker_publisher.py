@@ -19,9 +19,9 @@ class FireMarkerPublisher:
         marker.pose.position = msg.point  # 火焰位置
         
         # 可视化样式设置
-        marker.scale.x = 0.3  # 球体直径(m)
-        marker.scale.y = 0.3
-        marker.scale.z = 0.3
+        marker.scale.x = 0.1  # 球体直径(m)
+        marker.scale.y = 0.1
+        marker.scale.z = 0.1
         marker.color.r = 1.0  # 红色火焰
         marker.color.a = 0.8  # 透明度
         marker.lifetime = rospy.Duration(0.5)  # 持续显示时间

@@ -50,6 +50,13 @@ class Fire3DLocator:
     
         self.pub.publish(point_3d)  # 发布3D坐标
 
+        #终端显示火焰位置
+        rospy.loginfo("\n火焰位置(相机坐标系):\n"
+                    f"X: {point_3d.point.x:.3f} m\n"
+                    f"Y: {point_3d.point.y:.3f} m\n"
+                    f"Z: {point_3d.point.z:.3f} m\n"
+                    f"像素坐标: ({u}, {v})")
+        
 
 if __name__ == '__main__':
     rospy.init_node('fire_3d_locator')
