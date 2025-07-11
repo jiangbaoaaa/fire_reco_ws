@@ -37,26 +37,28 @@ class Fire3DLocator:
         
         u, v = int(msg.x), int(msg.y)
         depth = self.depth_image[v, u] / 1000.0  # mm转m
-    
-         # 计算相机坐标系下的3D坐标
-        point_3d = PointStamped()
-        point_3d.header.frame_id = "camera_depth_optical_frame"  # 使用相机光学坐标系:ml-citation{ref="3" data="citationList"}
-        point_3d.header.stamp = rospy.Time.now()
-    
-        # 像素坐标转3D坐标（针孔相机模型）:ml-citation{ref="1" data="citationList"}
-        point_3d.point.x = (u - self.intrinsics['cx']) * depth / self.intrinsics['fx']
-        point_3d.point.y = (v - self.intrinsics['cy']) * depth / self.intrinsics['fy']
-        point_3d.point.z = depth
-    
-        self.pub.publish(point_3d)  # 发布3D坐标
 
-        #终端显示火焰位置
-        rospy.loginfo("\n火焰位置(相机坐标系):\n"
-                    f"X: {point_3d.point.x:.3f} m\n"
-                    f"Y: {point_3d.point.y:.3f} m\n"
-                    f"Z: {point_3d.point.z:.3f} m\n"
-                    f"像素坐标: ({u}, {v})")
+
+         # 计算相机坐标系下的3D坐标
+        if 0.1 < depth <10.0:
+            point_3d = PointStamped()
+            point_3d.header.frame_id = "camera_depth_optical_frame"  # 使用相机光学坐标系:ml-citation{ref="3" data="citationList"}
+            point_3d.header.stamp = rospy.Time.now()
         
+            # 像素坐标转3D坐标（针孔相机模型）:ml-citation{ref="1" data="citationList"}
+            point_3d.point.x = (u - self.intrinsics['cx']) * depth / self.intrinsics['fx']
+            point_3d.point.y = (v - self.intrinsics['cy']) * depth / self.intrinsics['fy']
+            point_3d.point.z = depth
+        
+            self.pub.publish(point_3d)  # 发布3D坐标
+
+            #终端显示火焰位置
+            rospy.loginfo("\n火焰位置(相机坐标系):\n"
+                        f"X: {point_3d.point.x:.3f} m\n"
+                        f"Y: {point_3d.point.y:.3f} m\n"
+                        f"Z: {point_3d.point.z:.3f} m\n"
+                        f"像素坐标: ({u}, {v})")
+            
 
 if __name__ == '__main__':
     rospy.init_node('fire_3d_locator')

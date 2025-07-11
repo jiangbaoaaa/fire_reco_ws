@@ -23,17 +23,34 @@ class FireDetector:
         self.image_sub = rospy.Subscriber("/camera/color/image_raw", 
                                         Image, self.image_callback)
         
-    def dynamic_threshold(self, hsv_img):
-        """动态调整饱和度阈值"""
-        avg_sat = np.mean(hsv_img[:,:,1])
-        self.lower_fire[1] = max(100, int(avg_sat * 0.65))
+    # def dynamic_threshold(self, hsv_img):
+    #     """动态调整饱和度阈值"""
+    #     avg_sat = np.mean(hsv_img[:,:,1])
+    #     self.lower_fire[1] = max(100, int(avg_sat * 0.65))
         
-    def motion_analysis(self, frame):
-        """运动特征分析"""
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        fgmask = self.fgbg.apply(gray)
-        return cv2.medianBlur(fgmask, 5)
+    def dynamic_threshold(self, hsv_img):
+        # 取图像中心区域（避开边缘干扰）
+        h,w = hsv_img.shape[:2]
+        roi = hsv_img[h//4:3*h//4, w//4:3*w//4]
+        # 使用75分位数避免极端值影响
+        avg_sat = np.percentile(roi[:,:,1], 75)  
+        self.lower_fire[1] = max(120, int(avg_sat * 0.7))  # 提高基础阈值
     
+    # def motion_analysis(self, frame):
+    #     """运动特征分析"""
+    #     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #     fgmask = self.fgbg.apply(gray)
+    #     return cv2.medianBlur(fgmask, 5)
+    def motion_analysis(self, frame):
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        if self.prev_gray is not None:
+            flow = cv2.calcOpticalFlowFarneback(self.prev_gray, gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+            mag = cv2.norm(flow, cv2.NORM_L2)
+            if mag < 500:  # 运动强度不足时忽略
+                return np.zeros_like(gray)
+        self.prev_gray = gray
+        return self.fgbg.apply(gray)
+
     def image_callback(self, msg):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")

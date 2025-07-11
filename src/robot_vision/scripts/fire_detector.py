@@ -23,17 +23,26 @@ class FireDetector:
         self.image_sub = rospy.Subscriber("/camera/color/image_raw", 
                                         Image, self.image_callback)
         
-    def dynamic_threshold(self, hsv_img):
-        """动态调整饱和度阈值"""
-        avg_sat = np.mean(hsv_img[:,:,1])
-        self.lower_fire[1] = max(100, int(avg_sat * 0.65))
+    # def dynamic_threshold(self, hsv_img):
+    #     """动态调整饱和度阈值"""
+    #     avg_sat = np.mean(hsv_img[:,:,1])
+    #     self.lower_fire[1] = max(100, int(avg_sat * 0.65))
         
+    def dynamic_threshold(self, hsv_img):
+        # 取图像中心区域（避开边缘干扰）
+        h,w = hsv_img.shape[:2]
+        roi = hsv_img[h//4:3*h//4, w//4:3*w//4]
+        # 使用75分位数避免极端值影响
+        avg_sat = np.percentile(roi[:,:,1], 75)  
+        self.lower_fire[1] = max(120, int(avg_sat * 0.72))  # 提高基础阈值
+    
     def motion_analysis(self, frame):
         """运动特征分析"""
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         fgmask = self.fgbg.apply(gray)
         return cv2.medianBlur(fgmask, 5)
-    
+
+
     def image_callback(self, msg):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
